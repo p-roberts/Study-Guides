@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA Security+ SY0-701 Study Guide</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3350;
+    --accent: #4f8ef7;
+    --accent2: #7c5cbf;
+    --green: #3dd68c;
+    --red: #f75f5f;
+    --yellow: #f7c948;
+    --text: #e8eaf6;
+    --muted: #7b82a8;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+
+  /* NAV */
+  nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; }
+  nav .brand { font-weight: 700; font-size: 1rem; color: var(--accent); padding: 14px 0; margin-right: 12px; white-space: nowrap; }
+  nav button { background: none; border: none; color: var(--muted); cursor: pointer; padding: 14px 12px; font-size: 0.85rem; border-bottom: 2px solid transparent; transition: all .2s; white-space: nowrap; }
+  nav button:hover, nav button.active { color: var(--text); border-bottom-color: var(--accent); }
+
+  /* LAYOUT */
+  .page { display: none; max-width: 960px; margin: 0 auto; padding: 28px 20px; }
+  .page.active { display: block; }
+
+  h1 { font-size: 1.7rem; margin-bottom: 6px; }
+  h2 { font-size: 1.2rem; margin-bottom: 14px; color: var(--accent); }
+  h3 { font-size: 1rem; margin-bottom: 8px; }
+  p { line-height: 1.6; color: #c5c9e0; }
+  .muted { color: var(--muted); font-size: 0.85rem; }
+
+  /* CARDS */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .domain-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; cursor: pointer; transition: border-color .2s, transform .15s; }
+  .domain-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .domain-card .pct { font-size: 1.6rem; font-weight: 700; color: var(--accent); }
+  .domain-card .title { font-size: 0.95rem; margin: 4px 0 6px; }
+  .domain-card .sub { font-size: 0.78rem; color: var(--muted); }
+  .domain-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; margin-bottom: 10px; }
+
+  /* PROGRESS BAR */
+  .progress-bar { background: var(--surface2); border-radius: 99px; height: 8px; margin-top: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .4s; }
+
+  /* ACCORDION */
+  .accordion { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 12px; }
+  .accordion-header { background: var(--surface); padding: 14px 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; user-select: none; }
+  .accordion-header:hover { background: var(--surface2); }
+  .accordion-body { display: none; padding: 16px 18px; background: var(--bg); border-top: 1px solid var(--border); }
+  .accordion-body.open { display: block; }
+  .accordion-header .arrow { transition: transform .2s; }
+  .accordion-header.open .arrow { transform: rotate(180deg); }
+
+  /* CONCEPT LIST */
+  .concept-list { list-style: none; }
+  .concept-list li { padding: 8px 0; border-bottom: 1px solid var(--border); display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; }
+  .concept-list li:last-child { border-bottom: none; }
+  .concept-list li .tag { background: var(--surface2); color: var(--accent); border-radius: 6px; padding: 2px 7px; font-size: 0.75rem; white-space: nowrap; margin-top: 1px; }
+
+  /* FLASHCARDS */
+  .flashcard-area { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+  .flashcard-wrap { perspective: 1000px; width: 100%; max-width: 560px; height: 280px; cursor: pointer; }
+  .flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform .5s; }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .flashcard-front, .flashcard-back { position: absolute; inset: 0; backface-visibility: hidden; border-radius: var(--radius); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 28px; text-align: center; }
+  .flashcard-front { background: linear-gradient(135deg, var(--surface), var(--surface2)); border: 1px solid var(--border); }
+  .flashcard-back { background: linear-gradient(135deg, #1a2744, #1e2a50); border: 1px solid var(--accent); transform: rotateY(180deg); }
+  .flashcard-front .label { font-size: 0.75rem; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .flashcard-front .question { font-size: 1.1rem; font-weight: 600; line-height: 1.5; }
+  .flashcard-back .answer { font-size: 0.95rem; line-height: 1.6; color: #d0e8ff; }
+  .flashcard-back .hint { font-size: 0.75rem; color: var(--muted); margin-top: 12px; }
+  .fc-controls { display: flex; gap: 12px; align-items: center; }
+  .fc-controls button { background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px 20px; cursor: pointer; font-size: 0.9rem; transition: all .2s; }
+  .fc-controls button:hover { border-color: var(--accent); color: var(--accent); }
+  .fc-counter { color: var(--muted); font-size: 0.85rem; }
+  .fc-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .fc-filter button { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); border-radius: 20px; padding: 5px 14px; cursor: pointer; font-size: 0.8rem; transition: all .2s; }
+  .fc-filter button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .fc-hint { font-size: 0.8rem; color: var(--muted); }
+
+  /* QUIZ */
+  .quiz-question { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 16px; }
+  .quiz-q-text { font-size: 0.95rem; font-weight: 600; margin-bottom: 16px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-option { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; cursor: pointer; font-size: 0.9rem; transition: all .2s; }
+  .quiz-option:hover:not(.disabled) { border-color: var(--accent); }
+  .quiz-option.correct { border-color: var(--green); background: rgba(61,214,140,.1); color: var(--green); }
+  .quiz-option.wrong { border-color: var(--red); background: rgba(247,95,95,.1); color: var(--red); }
+  .quiz-option.disabled { cursor: default; }
+  .quiz-explain { margin-top: 12px; padding: 12px; background: rgba(79,142,247,.08); border-left: 3px solid var(--accent); border-radius: 4px; font-size: 0.85rem; line-height: 1.5; display: none; }
+  .quiz-explain.show { display: block; }
+  .quiz-meta { font-size: 0.75rem; color: var(--muted); margin-bottom: 8px; }
+  .quiz-score-box { background: linear-gradient(135deg, var(--surface), var(--surface2)); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; text-align: center; margin-bottom: 20px; }
+  .quiz-score-box .big { font-size: 3rem; font-weight: 700; }
+  .quiz-score-box .sub { color: var(--muted); }
+  .btn { display: inline-block; background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 10px 22px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: opacity .2s; }
+  .btn:hover { opacity: .85; }
+  .btn.secondary { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
+  .btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* HOME */
+  .hero { background: linear-gradient(135deg, #141828, #1a2040); border: 1px solid var(--border); border-radius: var(--radius); padding: 30px; margin-bottom: 28px; }
+  .hero h1 { font-size: 1.5rem; }
+  .hero .subtitle { color: var(--muted); margin-top: 6px; font-size: 0.9rem; }
+  .stat-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
+  .stat { background: var(--surface2); border-radius: 10px; padding: 14px 18px; flex: 1; min-width: 120px; }
+  .stat .val { font-size: 1.4rem; font-weight: 700; color: var(--accent); }
+  .stat .label { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+  .tip-box { background: rgba(79,142,247,.08); border: 1px solid rgba(79,142,247,.25); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 20px; font-size: 0.88rem; line-height: 1.6; }
+  .tip-box strong { color: var(--accent); }
+
+  /* DOMAIN DETAIL */
+  .back-btn { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 0.88rem; padding: 0; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
+  .back-btn:hover { text-decoration: underline; }
+  .key-term { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; align-items: flex-start; }
+  .key-term:last-child { border-bottom: none; }
+  .key-term strong { color: var(--accent); min-width: 150px; flex-shrink: 0; }
+  .key-term span { color: #c5c9e0; line-height: 1.5; }
+  .mnemo { background: rgba(124,92,191,.12); border: 1px solid rgba(124,92,191,.3); border-radius: 8px; padding: 12px 16px; font-size: 0.88rem; margin: 12px 0; }
+  .mnemo .label { font-size: 0.72rem; color: var(--accent2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+
+  /* OBJECTIVES CHECKLIST */
+  .obj-list { list-style: none; }
+  .obj-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; cursor: pointer; }
+  .obj-item:last-child { border-bottom: none; }
+  .obj-item input[type=checkbox] { margin-top: 2px; accent-color: var(--accent); width: 16px; height: 16px; flex-shrink: 0; }
+  .obj-item label { cursor: pointer; line-height: 1.5; }
+  .obj-item.checked label { text-decoration: line-through; color: var(--muted); }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    nav { gap: 0; }
+    nav button { padding: 12px 8px; font-size: 0.78rem; }
+    .stat-row { flex-direction: column; }
+    .flashcard-wrap { height: 240px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">🛡️ Sec+ SY0-701</div>
+  <button class="active" onclick="showPage('home')">Home</button>
+  <button onclick="showPage('domains')">Domains</button>
+  <button onclick="showPage('flashcards')">Flashcards</button>
+  <button onclick="showPage('quiz')">Practice Quiz</button>
+  <button onclick="showPage('objectives')">Objectives</button>
+</nav>
+
+<!-- ========== HOME ========== -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <h1>CompTIA Security+ SY0-701</h1>
+    <p class="subtitle">Your interactive study companion for the current exam. Built for beginners — no prior security experience required.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="val">5</div><div class="label">Exam Domains</div></div>
+      <div class="stat"><div class="val">90</div><div class="label">Max Questions</div></div>
+      <div class="stat"><div class="val">750</div><div class="label">Passing Score (0–900)</div></div>
+      <div class="stat"><div class="val">90 min</div><div class="label">Time Limit</div></div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>How to use this guide:</strong> Work through the <b>Domains</b> to learn concepts, drill with <b>Flashcards</b> to lock in terms, take the <b>Practice Quiz</b> to test yourself, and track your progress with the <b>Objectives</b> checklist.
+  </div>
+
+  <h2>Exam Domain Breakdown</h2>
+  <div class="card-grid">
+    <div class="domain-card" onclick="showDomain(0)">
+      <div class="pct">12%</div>
+      <div class="title">1. General Security Concepts</div>
+      <div class="sub">Controls, cryptography, authentication types</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%" id="prog-0"></div></div>
+    </div>
+    <div class="domain-card" onclick="showDomain(1)">
+      <div class="pct">22%</div>
+      <div class="title">2. Threats, Vulnerabilities & Mitigations</div>
+      <div class="sub">Malware, attacks, threat intelligence</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%" id="prog-1"></div></div>
+    </div>
+    <div class="domain-card" onclick="showDomain(2)">
+      <div class="pct">18%</div>
+      <div class="title">3. Security Architecture</div>
+      <div class="sub">Network design, cloud, infrastructure</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%" id="prog-2"></div></div>
+    </div>
+    <div class="domain-card" onclick="showDomain(3)">
+      <div class="pct">28%</div>
+      <div class="title">4. Security Operations</div>
+      <div class="sub">IAM, incident response, monitoring</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%" id="prog-3"></div></div>
+    </div>
+    <div class="domain-card" onclick="showDomain(4)">
+      <div class="pct">20%</div>
+      <div class="title">5. Security Program Management</div>
+      <div class="sub">Compliance, risk, governance, privacy</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%" id="prog-4"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>💡 Exam Tips for Beginners</h3>
+    <ul style="list-style:disc; padding-left:20px; margin-top:10px; line-height:1.9; font-size:0.9rem; color:#c5c9e0;">
+      <li>Questions often describe a scenario — read carefully before choosing an answer.</li>
+      <li>Performance-Based Questions (PBQs) appear first; don't spend too long on them.</li>
+      <li>When stuck, eliminate obviously wrong answers first — then pick the "most correct" option.</li>
+      <li>"Least privilege" and "defense in depth" are guiding principles behind many right answers.</li>
+      <li>Know the difference between <b>authentication</b> (who are you?) and <b>authorization</b> (what can you do?).</li>
+      <li>Study acronyms: CIA Triad, AAA, MFA, PKI, IDS/IPS, SIEM, SOC, DLP, MDM.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== DOMAINS LIST ========== -->
+<div id="page-domains" class="page">
+  <h1>Study Domains</h1>
+  <p class="muted" style="margin-bottom:20px;">Click any domain to explore concepts, key terms, and memory aids.</p>
+  <div id="domain-list-view">
+    <div class="card" style="cursor:pointer;" onclick="showDomain(0)">
+      <span class="domain-badge" style="background:rgba(79,142,247,.15);color:var(--accent);">12% of exam</span>
+      <h3>Domain 1: General Security Concepts</h3>
+      <p style="font-size:.88rem; margin-top:4px;">Security controls, basic cryptography, certificates, authentication methods, and fundamental security principles like the CIA Triad.</p>
+    </div>
+    <div class="card" style="cursor:pointer;" onclick="showDomain(1)">
+      <span class="domain-badge" style="background:rgba(247,95,95,.12);color:var(--red);">22% of exam</span>
+      <h3>Domain 2: Threats, Vulnerabilities & Mitigations</h3>
+      <p style="font-size:.88rem; margin-top:4px;">Malware types, social engineering, application attacks, network attacks, vulnerability scanning, and threat intelligence.</p>
+    </div>
+    <div class="card" style="cursor:pointer;" onclick="showDomain(2)">
+      <span class="domain-badge" style="background:rgba(61,214,140,.12);color:var(--green);">18% of exam</span>
+      <h3>Domain 3: Security Architecture</h3>
+      <p style="font-size:.88rem; margin-top:4px;">On-prem vs. cloud, network segmentation, firewalls, VPNs, zero trust, secure infrastructure design.</p>
+    </div>
+    <div class="card" style="cursor:pointer;" onclick="showDomain(3)">
+      <span class="domain-badge" style="background:rgba(247,201,72,.12);color:var(--yellow);">28% of exam</span>
+      <h3>Domain 4: Security Operations</h3>
+      <p style="font-size:.88rem; margin-top:4px;">Identity & access management, endpoint security, incident response, forensics, log monitoring, and SIEM.</p>
+    </div>
+    <div class="card" style="cursor:pointer;" onclick="showDomain(4)">
+      <span class="domain-badge" style="background:rgba(124,92,191,.15);color:var(--accent2);">20% of exam</span>
+      <h3>Domain 5: Security Program Management & Oversight</h3>
+      <p style="font-size:.88rem; margin-top:4px;">Risk management, compliance frameworks, data privacy, third-party risk, security policies and governance.</p>
+    </div>
+  </div>
+
+  <!-- DOMAIN DETAIL VIEWS -->
+  <div id="domain-detail" style="display:none;">
+    <button class="back-btn" onclick="closeDomain()">← Back to domains</button>
+    <div id="domain-content"></div>
+  </div>
+</div>
+
+<!-- ========== FLASHCARDS ========== -->
+<div id="page-flashcards" class="page">
+  <h1>Flashcards</h1>
+  <p class="muted" style="margin-bottom:16px;">Click a card to reveal the answer. Filter by domain to focus your study.</p>
+  <div class="fc-filter" id="fc-filter">
+    <button class="active" onclick="filterCards('all', this)">All</button>
+    <button onclick="filterCards(0, this)">Domain 1</button>
+    <button onclick="filterCards(1, this)">Domain 2</button>
+    <button onclick="filterCards(2, this)">Domain 3</button>
+    <button onclick="filterCards(3, this)">Domain 4</button>
+    <button onclick="filterCards(4, this)">Domain 5</button>
+  </div>
+  <div class="flashcard-area">
+    <div class="flashcard-wrap" onclick="flipCard()">
+      <div class="flashcard" id="flashcard">
+        <div class="flashcard-front">
+          <div class="label" id="fc-domain-label">Domain 1</div>
+          <div class="question" id="fc-question">Loading...</div>
+        </div>
+        <div class="flashcard-back">
+          <div class="answer" id="fc-answer">Loading...</div>
+          <div class="hint">Tap card to flip back</div>
+        </div>
+      </div>
+    </div>
+    <p class="fc-hint">Tap card to flip • Use arrows to navigate</p>
+    <div class="fc-controls">
+      <button onclick="prevCard()">← Prev</button>
+      <span class="fc-counter" id="fc-counter">1 / 1</span>
+      <button onclick="nextCard()">Next →</button>
+    </div>
+    <button class="btn secondary" onclick="shuffleCards()">🔀 Shuffle</button>
+  </div>
+</div>
+
+<!-- ========== QUIZ ========== -->
+<div id="page-quiz" class="page">
+  <h1>Practice Quiz</h1>
+  <p class="muted" style="margin-bottom:20px;">Select an answer — explanations appear after each question.</p>
+  <div id="quiz-score" style="display:none;"></div>
+  <div id="quiz-container"></div>
+  <div id="quiz-actions" style="margin-top:8px; display:flex; gap:12px; flex-wrap:wrap;"></div>
+</div>
+
+<!-- ========== OBJECTIVES ========== -->
+<div id="page-objectives" class="page">
+  <h1>Exam Objectives Checklist</h1>
+  <p class="muted" style="margin-bottom:8px;">Check off objectives as you master them. Progress is saved in your browser.</p>
+  <div id="obj-progress-bar" style="margin-bottom:24px;">
+    <div style="display:flex; justify-content:space-between; font-size:.82rem; color:var(--muted); margin-bottom:6px;">
+      <span>Overall Progress</span><span id="obj-pct">0%</span>
+    </div>
+    <div class="progress-bar" style="height:10px;"><div class="progress-fill" id="obj-fill" style="width:0%"></div></div>
+  </div>
+  <div id="obj-list"></div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+
+const domainData = [
+  {
+    title: "Domain 1: General Security Concepts",
+    pct: "12%",
+    color: "var(--accent)",
+    intro: "This domain covers the foundational ideas you'll encounter throughout all of security. Think of it as learning the vocabulary and grammar before writing sentences — you need these concepts to make sense of everything else.",
+    sections: [
+      {
+        title: "The CIA Triad",
+        content: `The CIA Triad is the backbone of every security decision. Like a three-legged stool, removing any leg causes everything to topple.<br><br>
+        <ul style="list-style:disc;padding-left:20px;line-height:2;font-size:.9rem;color:#c5c9e0;">
+          <li><b style="color:var(--accent)">Confidentiality</b> — Only authorized people can read the data. Encryption is the main tool here.</li>
+          <li><b style="color:var(--accent)">Integrity</b> — Data hasn't been altered without authorization. Hashing verifies this.</li>
+          <li><b style="color:var(--accent)">Availability</b> — Systems and data are accessible when needed. Redundancy and backups protect this.</li>
+        </ul>
+        <div class="mnemo"><div class="label">Memory aid</div><b>C</b>an <b>I</b> <b>A</b>lways access it? → <b>C</b>onfidentiality, <b>I</b>ntegrity, <b>A</b>vailability</div>`
+      },
+      {
+        title: "Security Controls",
+        content: `Controls are the safeguards we put in place. They're categorized two ways: by <b>type</b> and by <b>category</b>.<br><br>
+        <b>By Type:</b>
+        <ul style="list-style:disc;padding-left:20px;line-height:2;font-size:.9rem;color:#c5c9e0;">
+          <li><b>Technical</b> — Software/hardware (firewalls, encryption, MFA)</li>
+          <li><b>Managerial</b> — Policies and procedures (acceptable use policy, risk assessments)</li>
+          <li><b>Operational</b> — Day-to-day processes (security awareness training, background checks)</li>
+          <li><b>Physical</b> — Tangible barriers (door locks, cameras, fences)</li>
+        </ul><br>
+        <b>By Category (what they do):</b>
+        <ul style="list-style:disc;padding-left:20px;line-height:2;font-size:.9rem;color:#c5c9e0;">
+          <li><b>Preventive</b> — Stop the attack (a locked door)</li>
+          <li><b>Detective</b> — Find out it happened (a camera recording)</li>
+          <li><b>Corrective</b> — Fix it afterward (restoring from backup)</li>
+          <li><b>Deterrent</b> — Discourage attacks ("Premises monitored" sign)</li>
+          <li><b>Compensating</b> — Alternative when a primary control can't be used</li>
+          <li><b>Directive</b> — Tell people what to do (a policy saying "use strong passwords")</li>
+        </ul>`
+      },
+      {
+        title: "Cryptography Basics",
+        content: `Cryptography is the art of scrambling data so only the intended recipient can unscramble it — like a secret language only you and a friend know.<br><br>
+        <div class="key-term"><strong>Symmetric encryption</strong><span>Same key encrypts AND decrypts. Fast but key-sharing is tricky. Example: AES.</span></div>
+        <div class="key-term"><strong>Asymmetric encryption</strong><span>Key pair: public key encrypts, private key decrypts. Solves key-sharing problem. Example: RSA.</span></div>
+        <div class="key-term"><strong>Hashing</strong><span>One-way function that produces a fixed-length "fingerprint." Can't be reversed. Used to verify integrity. Examples: SHA-256, MD5 (weak).</span></div>
+        <div class="key-term"><strong>Digital Signature</strong><span>Sender hashes a message and encrypts the hash with their private key. Proves authenticity and integrity.</span></div>
+        <div class="key-term"><strong>PKI</strong><span>Public Key Infrastructure — the system of Certificate Authorities (CAs) that issues and manages digital certificates, like a government issuing passports.</span></div>`
+      },
+      {
+        title: "Authentication Factors",
+        content: `Authentication answers "who are you?" The more factors you combine, the harder it is for an attacker to impersonate you.<br><br>
+        <div class="key-term"><strong>Something you know</strong><span>Password, PIN, security question</span></div>
+        <div class="key-term"><strong>Something you have</strong><span>Smart card, token, phone (authenticator app)</span></div>
+        <div class="key-term"><strong>Something you are</strong><span>Biometrics — fingerprint, retina, face</span></div>
+        <div class="key-term"><strong>Somewhere you are</strong><span>GPS location, IP address</span></div>
+        <div class="key-term"><strong>MFA</strong><span>Multi-Factor Authentication — combining 2+ different factor types. Two passwords = NOT MFA (same type).</span></div>
+        <div class="key-term"><strong>SSO</strong><span>Single Sign-On — log in once, access multiple systems. Reduces password fatigue but creates a single point of failure.</span></div>`
+      }
+    ]
+  },
+  {
+    title: "Domain 2: Threats, Vulnerabilities & Mitigations",
+    pct: "22%",
+    color: "var(--red)",
+    intro: "This is the biggest domain and the one that feels most 'hacker movie.' You'll learn how attacks work and how to stop them. Understanding the attacker's mindset is the best way to build defenses.",
+    sections: [
+      {
+        title: "Malware Types",
+        content: `Malware (malicious software) comes in many flavors. Think of these as different tools in an attacker's toolkit:<br><br>
+        <div class="key-term"><strong>Virus</strong><span>Attaches to legitimate files, spreads when the file is opened. Needs user action to spread.</span></div>
+        <div class="key-term"><strong>Worm</strong><span>Self-replicates across networks without user action. Spreads automatically.</span></div>
+        <div class="key-term"><strong>Trojan</strong><span>Disguised as legitimate software. Doesn't self-replicate but opens a backdoor.</span></div>
+        <div class="key-term"><strong>Ransomware</strong><span>Encrypts your files and demands payment for the decryption key.</span></div>
+        <div class="key-term"><strong>Spyware/Keylogger</strong><span>Silently monitors activity; captures keystrokes, screenshots, credentials.</span></div>
+        <div class="key-term"><strong>Rootkit</strong><span>Hides deep in the OS, often at the kernel level. Very hard to detect or remove.</span></div>
+        <div class="key-term"><strong>Botnet/RAT</strong><span>Infected machines (bots) controlled remotely. RAT = Remote Access Trojan. Used for DDoS, spam campaigns.</span></div>
+        <div class="key-term"><strong>Logic Bomb</strong><span>Malicious code that triggers on a specific condition (e.g., a date or an event).</span></div>`
+      },
+      {
+        title: "Social Engineering",
+        content: `Social engineering exploits human psychology rather than technical vulnerabilities — it's easier to trick a person than crack a firewall.<br><br>
+        <div class="key-term"><strong>Phishing</strong><span>Mass email pretending to be a trusted source to steal credentials or install malware.</span></div>
+        <div class="key-term"><strong>Spear Phishing</strong><span>Targeted phishing using personalized info about the victim. Much more convincing.</span></div>
+        <div class="key-term"><strong>Whaling</strong><span>Spear phishing aimed at executives (big fish = whale).</span></div>
+        <div class="key-term"><strong>Vishing</strong><span>Voice phishing — scam phone calls. "This is the IRS..."</span></div>
+        <div class="key-term"><strong>Smishing</strong><span>SMS/text phishing. "Your package is held, click here."</span></div>
+        <div class="key-term"><strong>Pretexting</strong><span>Creating a fabricated scenario to extract information. "I'm from IT, I need your password to fix an issue."</span></div>
+        <div class="key-term"><strong>Tailgating / Piggybacking</strong><span>Physically following an authorized person through a secure door.</span></div>
+        <div class="key-term"><strong>Baiting</strong><span>Leaving infected USB drives in a parking lot hoping someone plugs them in.</span></div>`
+      },
+      {
+        title: "Network & Application Attacks",
+        content: `<div class="key-term"><strong>DoS / DDoS</strong><span>Denial of Service — overwhelm a system so it can't serve legitimate users. DDoS = distributed (uses botnet).</span></div>
+        <div class="key-term"><strong>Man-in-the-Middle (MitM)</strong><span>Attacker secretly intercepts and possibly alters communication between two parties.</span></div>
+        <div class="key-term"><strong>SQL Injection</strong><span>Inserting malicious SQL code into input fields to manipulate a database. Example: entering ' OR 1=1-- in a login form.</span></div>
+        <div class="key-term"><strong>XSS (Cross-Site Scripting)</strong><span>Injecting malicious scripts into a website that execute in other users' browsers.</span></div>
+        <div class="key-term"><strong>Buffer Overflow</strong><span>Sending more data than a buffer can hold, overwriting adjacent memory — can allow code execution.</span></div>
+        <div class="key-term"><strong>Pass-the-Hash</strong><span>Using a captured password hash directly to authenticate, without needing the actual password.</span></div>
+        <div class="key-term"><strong>Replay Attack</strong><span>Capturing valid authentication data and reusing it later.</span></div>
+        <div class="key-term"><strong>Zero-Day</strong><span>A vulnerability that's unknown to the vendor — no patch exists yet. Extremely dangerous.</span></div>`
+      },
+      {
+        title: "Vulnerability Management",
+        content: `<div class="key-term"><strong>Vulnerability Scanner</strong><span>Tool that automatically probes systems for known weaknesses (e.g., Nessus, OpenVAS).</span></div>
+        <div class="key-term"><strong>Penetration Testing</strong><span>Authorized simulated attack to find exploitable vulnerabilities. Goes further than a scanner.</span></div>
+        <div class="key-term"><strong>CVE</strong><span>Common Vulnerabilities and Exposures — a public dictionary of known vulnerabilities, each with a unique ID.</span></div>
+        <div class="key-term"><strong>CVSS</strong><span>Common Vulnerability Scoring System — rates vulnerability severity 0–10.</span></div>
+        <div class="key-term"><strong>Patch Management</strong><span>Process of regularly applying software updates to fix known vulnerabilities. Critical and often tested!</span></div>
+        <div class="key-term"><strong>Threat Intelligence</strong><span>Information about current threats — tactics, indicators of compromise (IoCs), attacker groups — used to proactively defend.</span></div>`
+      }
+    ]
+  },
+  {
+    title: "Domain 3: Security Architecture",
+    pct: "18%",
+    color: "var(--green)",
+    intro: "Architecture is about designing systems the right way from the start — like building a house with good locks, alarms, and fire escapes rather than adding them as afterthoughts. This domain covers network design and infrastructure security.",
+    sections: [
+      {
+        title: "Network Segmentation",
+        content: `Segmentation divides a network into zones so an attacker who breaches one can't freely roam everywhere — like having locked compartments on a ship so one flooding room doesn't sink the whole vessel.<br><br>
+        <div class="key-term"><strong>VLAN</strong><span>Virtual LAN — logical network segment. Separates traffic without needing separate physical hardware.</span></div>
+        <div class="key-term"><strong>DMZ</strong><span>Demilitarized Zone — a buffer network for public-facing servers (web, email). Separate from the internal network.</span></div>
+        <div class="key-term"><strong>Microsegmentation</strong><span>Fine-grained segmentation down to individual workloads or VMs, often used in cloud/data centers.</span></div>
+        <div class="key-term"><strong>Air Gap</strong><span>Physical isolation — a system with no network connection at all. Used for highly sensitive environments.</span></div>`
+      },
+      {
+        title: "Firewalls & Network Devices",
+        content: `<div class="key-term"><strong>Firewall</strong><span>Filters traffic based on rules. Can be packet-filtering (simple) or stateful (tracks connection state) or NGFW (deep inspection).</span></div>
+        <div class="key-term"><strong>IDS</strong><span>Intrusion Detection System — monitors and alerts on suspicious activity. Passive (alerts only, doesn't block).</span></div>
+        <div class="key-term"><strong>IPS</strong><span>Intrusion Prevention System — monitors AND blocks suspicious activity inline. Active.</span></div>
+        <div class="key-term"><strong>WAF</strong><span>Web Application Firewall — protects web apps from XSS, SQLi, etc. Operates at Layer 7.</span></div>
+        <div class="key-term"><strong>Proxy Server</strong><span>Intermediary for client requests — can filter content, cache data, and hide internal IP addresses.</span></div>
+        <div class="key-term"><strong>Load Balancer</strong><span>Distributes traffic across multiple servers for availability and performance.</span></div>`
+      },
+      {
+        title: "Cloud & Virtualization Security",
+        content: `<div class="key-term"><strong>IaaS / PaaS / SaaS</strong><span>Cloud service models. IaaS = you manage OS up. PaaS = you manage app up. SaaS = provider manages everything (e.g., Office 365).</span></div>
+        <div class="key-term"><strong>Shared Responsibility</strong><span>In cloud, security duties are split. The cloud provider secures "of" the cloud; you secure "in" the cloud.</span></div>
+        <div class="key-term"><strong>CASB</strong><span>Cloud Access Security Broker — a security checkpoint between users and cloud services. Enforces policies.</span></div>
+        <div class="key-term"><strong>Container Security</strong><span>Containers (like Docker) share a host OS kernel. Vulnerabilities can escape to the host — isolation matters.</span></div>
+        <div class="key-term"><strong>Serverless</strong><span>Code runs in provider-managed environments. You secure your code and data; provider handles infrastructure.</span></div>`
+      },
+      {
+        title: "Zero Trust & Secure Design",
+        content: `<div class="key-term"><strong>Zero Trust</strong><span>"Never trust, always verify." No user or device is trusted by default, even inside the network. Every access request is verified.</span></div>
+        <div class="key-term"><strong>Defense in Depth</strong><span>Multiple overlapping security layers. Like castle walls + a moat + guards + locked rooms.</span></div>
+        <div class="key-term"><strong>Least Privilege</strong><span>Users and systems get only the minimum access needed. Limits damage if an account is compromised.</span></div>
+        <div class="key-term"><strong>Secure by Default</strong><span>Systems should be secure out-of-the-box — unnecessary features disabled, strong default settings.</span></div>
+        <div class="key-term"><strong>VPN</strong><span>Virtual Private Network — encrypts traffic over a public network. Site-to-site connects offices; remote access connects individuals.</span></div>
+        <div class="key-term"><strong>SD-WAN</strong><span>Software-Defined WAN — manages wide area network traffic via software, often used with security features built in.</span></div>
+        <div class="mnemo"><div class="label">Remember</div>IDS <b>D</b>etects (passive) — IPS <b>P</b>revents (active)</div>`
+      }
+    ]
+  },
+  {
+    title: "Domain 4: Security Operations",
+    pct: "28%",
+    color: "var(--yellow)",
+    intro: "The biggest domain — this is what security teams do every day. Think of a hospital ER: triage incoming threats, treat incidents, keep systems healthy, and identify patients (users and devices) before letting them in.",
+    sections: [
+      {
+        title: "Identity & Access Management (IAM)",
+        content: `<div class="key-term"><strong>IAM</strong><span>Identity and Access Management — the policies and tools for managing who can access what.</span></div>
+        <div class="key-term"><strong>AAA</strong><span>Authentication (who are you?), Authorization (what can you do?), Accounting (what did you do?). RADIUS and TACACS+ are AAA protocols.</span></div>
+        <div class="key-term"><strong>RBAC</strong><span>Role-Based Access Control — access determined by job role. A nurse has different access than a doctor.</span></div>
+        <div class="key-term"><strong>DAC</strong><span>Discretionary Access Control — resource owner decides who gets access. Like sharing a Google Doc.</span></div>
+        <div class="key-term"><strong>MAC</strong><span>Mandatory Access Control — system enforces access based on classification labels (Top Secret, Secret). Used in government/military.</span></div>
+        <div class="key-term"><strong>MFA</strong><span>Multi-Factor Authentication — essential control against credential theft.</span></div>
+        <div class="key-term"><strong>PAM</strong><span>Privileged Access Management — controls and monitors accounts with elevated privileges (admins).</span></div>`
+      },
+      {
+        title: "Incident Response",
+        content: `Incident Response is a structured approach to handling security breaches. Think of it like a fire drill — you practice the steps so when a real fire happens, nobody panics.<br><br>
+        <b>The IR Lifecycle (PICERL):</b>
+        <ol style="padding-left:20px;line-height:2.2;font-size:.9rem;color:#c5c9e0;margin-top:8px;">
+          <li><b style="color:var(--accent)">Preparation</b> — Build the IR plan, train the team, set up tools before incidents happen.</li>
+          <li><b style="color:var(--accent)">Identification</b> — Detect and confirm that an incident has occurred.</li>
+          <li><b style="color:var(--accent)">Containment</b> — Stop the spread. Isolate affected systems.</li>
+          <li><b style="color:var(--accent)">Eradication</b> — Remove the threat (malware, rogue accounts, etc.).</li>
+          <li><b style="color:var(--accent)">Recovery</b> — Restore systems to normal operation safely.</li>
+          <li><b style="color:var(--accent)">Lessons Learned</b> — Document what happened and improve defenses.</li>
+        </ol>
+        <div class="mnemo"><div class="label">Memory aid</div><b>P</b>lease <b>I</b> <b>C</b>an <b>E</b>at <b>R</b>eal <b>L</b>asagna → Preparation, Identification, Containment, Eradication, Recovery, Lessons Learned</div>`
+      },
+      {
+        title: "Monitoring, Logging & SIEM",
+        content: `<div class="key-term"><strong>SIEM</strong><span>Security Information and Event Management — aggregates and correlates logs from across the environment. Central "security dashboard." Examples: Splunk, Microsoft Sentinel.</span></div>
+        <div class="key-term"><strong>Log Management</strong><span>Collecting, storing, and analyzing logs. Key sources: firewalls, servers, endpoints, DNS, authentication systems.</span></div>
+        <div class="key-term"><strong>NetFlow</strong><span>Network traffic metadata — shows who talked to whom, when, and how much data. Not content, just patterns.</span></div>
+        <div class="key-term"><strong>SOC</strong><span>Security Operations Center — the team (or room) that monitors alerts 24/7 and responds to incidents.</span></div>
+        <div class="key-term"><strong>Threat Hunting</strong><span>Proactively searching for threats that evaded detection — assumes a breach has already occurred.</span></div>`
+      },
+      {
+        title: "Endpoint & Data Security",
+        content: `<div class="key-term"><strong>EDR</strong><span>Endpoint Detection and Response — advanced endpoint security that detects, investigates, and responds to threats on devices.</span></div>
+        <div class="key-term"><strong>DLP</strong><span>Data Loss Prevention — prevents sensitive data from leaving the organization (email, USB, cloud upload).</span></div>
+        <div class="key-term"><strong>MDM</strong><span>Mobile Device Management — enforces security policies on phones and tablets (encryption, remote wipe, app control).</span></div>
+        <div class="key-term"><strong>FDE</strong><span>Full Disk Encryption — encrypts all data on a drive so stolen devices can't be read. BitLocker (Windows), FileVault (Mac).</span></div>
+        <div class="key-term"><strong>Hardening</strong><span>Reducing attack surface by disabling unnecessary services, removing default accounts, and applying patches.</span></div>
+        <div class="key-term"><strong>Forensics</strong><span>Collecting and preserving digital evidence. Key principle: maintain chain of custody and don't alter evidence (use write blockers).</span></div>`
+      }
+    ]
+  },
+  {
+    title: "Domain 5: Security Program Management & Oversight",
+    pct: "20%",
+    color: "var(--accent2)",
+    intro: "This domain is about the business side of security — the policies, processes, and frameworks that turn security from a technical function into an organized program. Think of it as the rulebook and management structure that makes everything else work.",
+    sections: [
+      {
+        title: "Risk Management",
+        content: `Risk is about what could go wrong and how bad it would be. Security decisions are really risk decisions.<br><br>
+        <div class="key-term"><strong>Risk = Threat × Vulnerability × Impact</strong><span>A threat exploiting a vulnerability causes an impact. Reduce any factor to reduce risk.</span></div>
+        <div class="key-term"><strong>Risk Treatments</strong><span><b>Accept</b> (live with it), <b>Transfer</b> (insurance), <b>Avoid</b> (don't do the risky thing), <b>Mitigate</b> (reduce likelihood/impact).</span></div>
+        <div class="key-term"><strong>BIA</strong><span>Business Impact Analysis — identifies critical processes and the impact of their disruption. Used to prioritize recovery.</span></div>
+        <div class="key-term"><strong>RTO / RPO</strong><span>Recovery Time Objective (how long to restore) / Recovery Point Objective (how much data loss is acceptable).</span></div>
+        <div class="key-term"><strong>Quantitative vs. Qualitative</strong><span>Quant = assigns dollar values (SLE, ALE). Qual = uses rankings like High/Medium/Low.</span></div>`
+      },
+      {
+        title: "Compliance Frameworks",
+        content: `<div class="key-term"><strong>NIST CSF</strong><span>NIST Cybersecurity Framework — voluntary framework for managing cyber risk. Core functions: Identify, Protect, Detect, Respond, Recover.</span></div>
+        <div class="key-term"><strong>ISO 27001</strong><span>International standard for an Information Security Management System (ISMS). Can be certified against.</span></div>
+        <div class="key-term"><strong>PCI DSS</strong><span>Payment Card Industry Data Security Standard — mandatory if you handle credit card data.</span></div>
+        <div class="key-term"><strong>HIPAA</strong><span>Health Insurance Portability and Accountability Act — protects health information (PHI) in the US.</span></div>
+        <div class="key-term"><strong>GDPR</strong><span>General Data Protection Regulation — EU privacy law. Applies to anyone handling EU citizens' data. Heavy fines for violations.</span></div>
+        <div class="key-term"><strong>SOC 2</strong><span>Audit report on a service organization's security controls. Commonly required by enterprise customers.</span></div>`
+      },
+      {
+        title: "Data Privacy & Classification",
+        content: `<div class="key-term"><strong>Data Classification</strong><span>Labeling data by sensitivity: Public, Internal, Confidential, Restricted/Top Secret. Determines how data must be handled.</span></div>
+        <div class="key-term"><strong>PII</strong><span>Personally Identifiable Information — name, SSN, address, email. Must be protected and often regulated.</span></div>
+        <div class="key-term"><strong>PHI</strong><span>Protected Health Information — medical records. Protected under HIPAA.</span></div>
+        <div class="key-term"><strong>Data Sovereignty</strong><span>Data is subject to the laws of the country where it is stored. Matters for cloud storage decisions.</span></div>
+        <div class="key-term"><strong>Right to be Forgotten</strong><span>GDPR right for individuals to request their data be deleted.</span></div>`
+      },
+      {
+        title: "Security Policies & Governance",
+        content: `<div class="key-term"><strong>AUP</strong><span>Acceptable Use Policy — defines what employees can and can't do with company resources.</span></div>
+        <div class="key-term"><strong>Change Management</strong><span>Formal process to review and approve changes to systems before they're implemented. Prevents unauthorized changes.</span></div>
+        <div class="key-term"><strong>Vendor Risk Management</strong><span>Assessing security practices of third parties (vendors, suppliers) who have access to your data or systems.</span></div>
+        <div class="key-term"><strong>Security Awareness Training</strong><span>Educating employees about threats (phishing, social engineering). Often the highest-ROI security control.</span></div>
+        <div class="key-term"><strong>Separation of Duties</strong><span>No single person controls all parts of a critical process. Prevents fraud and reduces error risk.</span></div>
+        <div class="key-term"><strong>Tabletop Exercise</strong><span>Discussion-based simulation of an incident scenario. Tests IR plan without actual disruption.</span></div>`
+      }
+    ]
+  }
+];
+
+const flashcards = [
+  // Domain 1
+  {d:0, q:"What does CIA stand for in cybersecurity?", a:"Confidentiality, Integrity, Availability — the three core goals of information security."},
+  {d:0, q:"What is the difference between symmetric and asymmetric encryption?", a:"Symmetric uses ONE key for both encryption and decryption (fast). Asymmetric uses a KEY PAIR — public key encrypts, private key decrypts (slower but solves key sharing)."},
+  {d:0, q:"What is a hash function and what is it used for?", a:"A one-way function that produces a fixed-length fingerprint of data. Used to verify data integrity — if the hash changes, the data was altered."},
+  {d:0, q:"What is Multi-Factor Authentication (MFA)?", a:"Using TWO OR MORE DIFFERENT factor types (know/have/are) to verify identity. Two passwords is NOT MFA — they're the same type."},
+  {d:0, q:"What is a digital certificate?", a:"An electronic document that binds a public key to an identity, issued by a Certificate Authority (CA). Like a digital passport."},
+  {d:0, q:"What is the difference between a Preventive and a Detective control?", a:"Preventive controls STOP incidents from happening (e.g., a firewall). Detective controls IDENTIFY that something happened (e.g., IDS, audit logs)."},
+  {d:0, q:"What is PKI?", a:"Public Key Infrastructure — the system of CAs, certificates, and policies that manages digital certificates and public-key encryption."},
+  {d:0, q:"What encryption algorithm is considered the gold standard today?", a:"AES (Advanced Encryption Standard) — especially AES-256. RSA is standard for asymmetric. SHA-256 for hashing."},
+
+  // Domain 2
+  {d:1, q:"What is the difference between a virus and a worm?", a:"A VIRUS requires a host file and user action to spread. A WORM self-replicates across networks automatically without user interaction."},
+  {d:1, q:"What is phishing vs. spear phishing?", a:"PHISHING is a mass untargeted attack via email. SPEAR PHISHING is targeted, using personal details about the victim — much more convincing."},
+  {d:1, q:"What is ransomware?", a:"Malware that encrypts the victim's files and demands payment (usually cryptocurrency) in exchange for the decryption key."},
+  {d:1, q:"What is a zero-day vulnerability?", a:"A vulnerability unknown to the software vendor, meaning no patch exists yet. Very dangerous because there's no official fix."},
+  {d:1, q:"What is SQL Injection?", a:"An attack where malicious SQL code is inserted into input fields to manipulate or extract database data. Prevented by input validation and parameterized queries."},
+  {d:1, q:"What is a Man-in-the-Middle (MitM) attack?", a:"An attacker secretly positions themselves between two communicating parties, intercepting and potentially modifying traffic. Prevented by encryption (TLS/HTTPS)."},
+  {d:1, q:"What is tailgating in security?", a:"A physical attack where an unauthorized person follows an authorized person through a secure entry point. Also called piggybacking."},
+  {d:1, q:"What is a rootkit?", a:"Malware that hides deep in the operating system (often at the kernel level) to conceal itself and other malware. Very difficult to detect and remove."},
+  {d:1, q:"What does CVE stand for?", a:"Common Vulnerabilities and Exposures — a public dictionary of known security vulnerabilities, each assigned a unique ID (e.g., CVE-2024-1234)."},
+  {d:1, q:"What is pretexting?", a:"A social engineering technique where the attacker creates a fabricated scenario (pretext) to manipulate a victim into providing information or access."},
+
+  // Domain 3
+  {d:2, q:"What is a DMZ?", a:"Demilitarized Zone — a network segment that sits between the internet and the internal network, hosting public-facing services (web servers, email). Provides a buffer zone."},
+  {d:2, q:"What is the difference between IDS and IPS?", a:"IDS (Intrusion Detection System) is PASSIVE — it monitors and alerts but does NOT block. IPS (Intrusion Prevention System) is ACTIVE — it monitors AND blocks threats inline."},
+  {d:2, q:"What is Zero Trust?", a:"A security model where no user, device, or system is trusted by default, even inside the corporate network. Every access request must be verified continuously."},
+  {d:2, q:"What is defense in depth?", a:"A layered security strategy using multiple overlapping controls, so if one layer fails, others still protect. Like a castle with walls, moat, guards, and locked rooms."},
+  {d:2, q:"What is least privilege?", a:"The principle that users and systems should have only the minimum access rights needed to perform their job — nothing more."},
+  {d:2, q:"What is a VLAN?", a:"Virtual Local Area Network — a logical network segment created in software. Groups devices into separate networks without needing separate physical hardware."},
+  {d:2, q:"What is a WAF?", a:"Web Application Firewall — a firewall specifically designed to protect web applications from attacks like SQL injection and XSS. Operates at Layer 7 (application layer)."},
+  {d:2, q:"In cloud security, what is 'shared responsibility'?", a:"Security duties are split between the cloud provider and the customer. The provider secures the underlying infrastructure; the customer secures what they deploy and configure on it."},
+
+  // Domain 4
+  {d:3, q:"What is the AAA framework?", a:"Authentication (verify identity), Authorization (grant appropriate access), Accounting (record what was done). RADIUS and TACACS+ are common AAA protocols."},
+  {d:3, q:"What are the 6 phases of the incident response lifecycle?", a:"Preparation → Identification → Containment → Eradication → Recovery → Lessons Learned. Mnemonic: 'Please I Can Eat Real Lasagna'"},
+  {d:3, q:"What is a SIEM?", a:"Security Information and Event Management — a system that collects, aggregates, and correlates security logs from across the environment to detect threats and enable response."},
+  {d:3, q:"What is RBAC?", a:"Role-Based Access Control — access permissions are assigned to roles, and users are assigned to roles. A nurse has different access than a doctor, regardless of who fills the role."},
+  {d:3, q:"What is DLP?", a:"Data Loss Prevention — technology that detects and prevents sensitive data from leaving the organization via email, USB drives, cloud uploads, etc."},
+  {d:3, q:"What is EDR?", a:"Endpoint Detection and Response — advanced endpoint security that continuously monitors devices, detects threats, and enables investigation and response."},
+  {d:3, q:"What is the chain of custody in forensics?", a:"Documentation tracking who has collected, handled, and analyzed digital evidence — ensuring the evidence hasn't been tampered with and is admissible."},
+  {d:3, q:"What is MDM?", a:"Mobile Device Management — software that enforces security policies on smartphones and tablets, including encryption, remote wipe, app management, and passcode requirements."},
+
+  // Domain 5
+  {d:4, q:"What are the four risk treatment options?", a:"Accept (tolerate the risk), Transfer (shift to insurance or third party), Avoid (eliminate the risky activity), Mitigate (reduce likelihood or impact)."},
+  {d:4, q:"What is RTO vs. RPO?", a:"RTO (Recovery Time Objective) = how long to restore systems after an outage. RPO (Recovery Point Objective) = how much data loss is acceptable (measured in time)."},
+  {d:4, q:"What is the NIST Cybersecurity Framework?", a:"A voluntary framework with five core functions: Identify, Protect, Detect, Respond, Recover. Widely used to structure and improve cybersecurity programs."},
+  {d:4, q:"What is PCI DSS?", a:"Payment Card Industry Data Security Standard — a mandatory standard for any organization that processes, stores, or transmits credit card data."},
+  {d:4, q:"What is separation of duties?", a:"Dividing critical tasks so no single person has complete control over a sensitive process — prevents fraud and reduces the risk of errors."},
+  {d:4, q:"What is a BIA?", a:"Business Impact Analysis — identifies critical business processes and quantifies the impact of their disruption, used to prioritize recovery efforts."},
+  {d:4, q:"What is PII?", a:"Personally Identifiable Information — data that can identify an individual, such as name, SSN, email, or address. Subject to many privacy regulations."},
+  {d:4, q:"What is GDPR?", a:"General Data Protection Regulation — EU regulation governing data privacy. Applies to any organization handling EU citizens' data. Violations can result in fines up to 4% of global annual revenue."},
+];
+
+const quizQuestions = [
+  {d:0, q:"An organization wants to ensure data has not been altered in transit. Which CIA property is this?", opts:["Confidentiality","Integrity","Availability","Authentication"], correct:1, explain:"Integrity ensures data has not been modified without authorization. Hashing (e.g., SHA-256) is the primary tool to verify integrity."},
+  {d:0, q:"Which type of encryption uses the same key for encryption and decryption?", opts:["Asymmetric","Hashing","Symmetric","PKI"], correct:2, explain:"Symmetric encryption uses one shared key for both operations. It's fast but requires a secure way to share the key. AES is the most common symmetric algorithm."},
+  {d:0, q:"A user presents a badge AND a fingerprint to enter a secure area. This is an example of:", opts:["Single Sign-On","Multi-Factor Authentication","Role-Based Access Control","Two-step verification"], correct:1, explain:"MFA requires two or more DIFFERENT factor types. A badge (something you have) + fingerprint (something you are) = two different factor types = MFA."},
+  {d:0, q:"Which control type is a security policy that tells employees not to share passwords?", opts:["Technical","Physical","Managerial / Operational","Corrective"], correct:2, explain:"A written policy is a Managerial or Operational control — it directs behavior through documentation rather than technology or physical means."},
+  {d:1, q:"An attacker sends a mass email pretending to be from a bank to steal login credentials. This is:", opts:["Spear phishing","Vishing","Phishing","Whaling"], correct:2, explain:"Phishing is mass, untargeted email fraud. Spear phishing is targeted at a specific person/org. Vishing uses voice calls. Whaling targets executives."},
+  {d:1, q:"Malware that self-replicates across a network without any user interaction is called a:", opts:["Virus","Trojan","Worm","Rootkit"], correct:2, explain:"Worms self-propagate automatically across networks. Viruses need a host file and user action. Trojans disguise themselves as legitimate software."},
+  {d:1, q:"A company discovers a vulnerability in software that the vendor does not yet know about. This is called a:", opts:["Logic bomb","Zero-day vulnerability","CVE","Buffer overflow"], correct:1, explain:"A zero-day vulnerability is unknown to the vendor, so no patch exists. It's called zero-day because the vendor has had zero days to address it."},
+  {d:1, q:"An attacker leaves infected USB drives in a company parking lot hoping employees will plug them in. This technique is called:", opts:["Pretexting","Tailgating","Baiting","Spear phishing"], correct:2, explain:"Baiting uses physical media (USB drives, CDs) left in locations where victims will find and use them, infecting their systems."},
+  {d:2, q:"A company places its public web server in a separate network segment between the internet and internal network. This segment is called a:", opts:["VLAN","DMZ","Zero Trust zone","Air gap"], correct:1, explain:"A DMZ (Demilitarized Zone) is a buffer network for public-facing servers. If attackers compromise the web server, they still can't directly reach internal systems."},
+  {d:2, q:"Which security principle states that users should only have the minimum access required to do their job?", opts:["Defense in depth","Zero trust","Least privilege","Need to know"], correct:2, explain:"Least privilege limits access to only what is necessary. Even if an account is compromised, the damage is limited to that account's restricted permissions."},
+  {d:2, q:"Which device monitors network traffic and BLOCKS malicious activity automatically?", opts:["IDS","Firewall","IPS","Proxy"], correct:2, explain:"IPS (Intrusion Prevention System) is active — it blocks threats. IDS (Intrusion Detection System) is passive — it only detects and alerts."},
+  {d:2, q:"A cloud provider is responsible for securing the physical servers and hypervisor. The customer is responsible for securing their applications and data. This describes:", opts:["Zero trust","Least privilege","Shared responsibility model","Defense in depth"], correct:2, explain:"The shared responsibility model defines security duties between cloud provider and customer. Provider = infrastructure security; Customer = data and application security."},
+  {d:3, q:"During incident response, a security team isolates affected servers to prevent an attack from spreading. Which phase is this?", opts:["Identification","Containment","Eradication","Recovery"], correct:1, explain:"Containment stops the spread of an incident. Eradication comes next (removing the threat). Recovery restores systems to normal operation."},
+  {d:3, q:"A SIEM system is BEST described as:", opts:["A firewall that blocks web attacks","A tool that aggregates and correlates security logs from multiple sources","An endpoint antivirus solution","A VPN concentrator"], correct:1, explain:"SIEM aggregates logs from across the environment and correlates events to detect threats that individual systems might miss. Examples: Splunk, Microsoft Sentinel."},
+  {d:3, q:"Which access control model assigns permissions based on an employee's job function?", opts:["DAC","MAC","RBAC","ABAC"], correct:2, explain:"RBAC (Role-Based Access Control) assigns permissions to roles, not individuals. If you're a nurse, you get nurse permissions — regardless of who you are."},
+  {d:3, q:"A forensic investigator uses a write blocker when collecting evidence. What is the PRIMARY reason?", opts:["To speed up data collection","To prevent any data from being written to the evidence drive, preserving its integrity","To encrypt the evidence","To create a backup copy"], correct:1, explain:"Write blockers ensure the original evidence is not modified during collection. Maintaining the integrity of evidence is critical for chain of custody and legal admissibility."},
+  {d:4, q:"An organization purchases cyber insurance to reduce the financial impact of a breach. This risk treatment is called:", opts:["Risk acceptance","Risk avoidance","Risk mitigation","Risk transfer"], correct:3, explain:"Risk transfer shifts the financial impact to a third party (insurance company). The risk still exists but the organization no longer bears the full financial burden."},
+  {d:4, q:"Which regulation specifically protects health information in the United States?", opts:["GDPR","PCI DSS","HIPAA","SOC 2"], correct:2, explain:"HIPAA (Health Insurance Portability and Accountability Act) protects PHI (Protected Health Information). GDPR is EU privacy law. PCI DSS covers payment card data."},
+  {d:4, q:"An organization's goal is to restore systems within 4 hours of an outage. This 4-hour target is called the:", opts:["RPO","BIA","RTO","MTTR"], correct:2, explain:"RTO (Recovery Time Objective) is the maximum acceptable time to restore systems. RPO is about data loss tolerance (how old the restored data can be)."},
+  {d:4, q:"Which principle ensures that no single employee can complete a critical transaction alone, reducing fraud risk?", opts:["Least privilege","Separation of duties","Need to know","Job rotation"], correct:1, explain:"Separation of duties splits control over sensitive processes. For example, the person who approves a payment should be different from the person who processes it."},
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let currentDomain = null;
+let currentFilter = 'all';
+let filteredCards = [...flashcards];
+let cardIndex = 0;
+let quizAnswered = [];
+let objProgress = JSON.parse(localStorage.getItem('sec_obj_progress') || '{}');
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b => { if (b.textContent.toLowerCase().includes(name === 'home' ? 'home' : name === 'domains' ? 'domain' : name === 'flashcards' ? 'flash' : name === 'quiz' ? 'quiz' : 'obj')) b.classList.add('active'); });
+  if (name === 'flashcards') initFlashcards();
+  if (name === 'quiz') initQuiz();
+  if (name === 'objectives') renderObjectives();
+}
+
+// ============================================================
+// DOMAINS
+// ============================================================
+function showDomain(idx) {
+  currentDomain = idx;
+  document.getElementById('domain-list-view').style.display = 'none';
+  document.getElementById('domain-detail').style.display = 'block';
+  const d = domainData[idx];
+  let html = `<h1>${d.title}</h1><p style="margin:10px 0 20px;color:#c5c9e0;">${d.intro}</p>`;
+  d.sections.forEach((s, i) => {
+    html += `<div class="accordion" id="acc-${idx}-${i}">
+      <div class="accordion-header" onclick="toggleAccordion('acc-${idx}-${i}')">
+        <span>${s.title}</span><span class="arrow">▼</span>
+      </div>
+      <div class="accordion-body" id="acc-body-${idx}-${i}">${s.content}</div>
+    </div>`;
+  });
+  document.getElementById('domain-content').innerHTML = html;
+  // Open first section
+  toggleAccordion(`acc-${idx}-0`);
+}
+
+function closeDomain() {
+  document.getElementById('domain-list-view').style.display = 'block';
+  document.getElementById('domain-detail').style.display = 'none';
+}
+
+function toggleAccordion(id) {
+  const header = document.querySelector(`#${id} .accordion-header`);
+  const body = document.getElementById(`acc-body-${id.replace('acc-', '')}`);
+  header.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+// ============================================================
+// FLASHCARDS
+// ============================================================
+function initFlashcards() {
+  filterCards(currentFilter, null, true);
+}
+
+function filterCards(filter, btn, silent) {
+  currentFilter = filter;
+  document.querySelectorAll('.fc-filter button').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else { const btns = document.querySelectorAll('.fc-filter button'); btns.forEach(b => { if ((filter === 'all' && b.textContent === 'All') || b.textContent === `Domain ${filter+1}`) b.classList.add('active'); }); }
+  filteredCards = filter === 'all' ? [...flashcards] : flashcards.filter(c => c.d === filter);
+  cardIndex = 0;
+  if (!silent) renderCard();
+  else renderCard();
+}
+
+function renderCard() {
+  const card = filteredCards[cardIndex];
+  const domainNames = ['Domain 1', 'Domain 2', 'Domain 3', 'Domain 4', 'Domain 5'];
+  document.getElementById('fc-domain-label').textContent = domainNames[card.d];
+  document.getElementById('fc-question').textContent = card.q;
+  document.getElementById('fc-answer').textContent = card.a;
+  document.getElementById('fc-counter').textContent = `${cardIndex + 1} / ${filteredCards.length}`;
+  const fc = document.getElementById('flashcard');
+  fc.classList.remove('flipped');
+}
+
+function flipCard() {
+  document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function nextCard() {
+  cardIndex = (cardIndex + 1) % filteredCards.length;
+  renderCard();
+}
+
+function prevCard() {
+  cardIndex = (cardIndex - 1 + filteredCards.length) % filteredCards.length;
+  renderCard();
+}
+
+function shuffleCards() {
+  for (let i = filteredCards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [filteredCards[i], filteredCards[j]] = [filteredCards[j], filteredCards[i]];
+  }
+  cardIndex = 0;
+  renderCard();
+}
+
+// ============================================================
+// QUIZ
+// ============================================================
+function initQuiz() {
+  quizAnswered = new Array(quizQuestions.length).fill(null);
+  renderQuiz();
+}
+
+function renderQuiz() {
+  const container = document.getElementById('quiz-container');
+  const scoreBox = document.getElementById('quiz-score');
+  scoreBox.style.display = 'none';
+  let html = '';
+  quizQuestions.forEach((q, qi) => {
+    const domainColors = ['var(--accent)','var(--red)','var(--green)','var(--yellow)','var(--accent2)'];
+    html += `<div class="quiz-question" id="qq-${qi}">
+      <div class="quiz-meta" style="color:${domainColors[q.d]}">Domain ${q.d + 1}</div>
+      <div class="quiz-q-text">${qi + 1}. ${q.q}</div>
+      <div class="quiz-options">`;
+    q.opts.forEach((opt, oi) => {
+      html += `<div class="quiz-option" id="qo-${qi}-${oi}" onclick="answerQuiz(${qi},${oi})">${String.fromCharCode(65+oi)}. ${opt}</div>`;
+    });
+    html += `</div><div class="quiz-explain" id="qe-${qi}">${q.explain}</div></div>`;
+  });
+  container.innerHTML = html;
+  const actions = document.getElementById('quiz-actions');
+  actions.innerHTML = `<button class="btn" onclick="showScore()">Check Score</button><button class="btn secondary" onclick="initQuiz()">Reset Quiz</button>`;
+}
+
+function answerQuiz(qi, oi) {
+  if (quizAnswered[qi] !== null) return;
+  quizAnswered[qi] = oi;
+  const q = quizQuestions[qi];
+  for (let i = 0; i < q.opts.length; i++) {
+    const el = document.getElementById(`qo-${qi}-${i}`);
+    el.classList.add('disabled');
+    if (i === q.correct) el.classList.add('correct');
+    else if (i === oi) el.classList.add('wrong');
+  }
+  document.getElementById(`qe-${qi}`).classList.add('show');
+}
+
+function showScore() {
+  const answered = quizAnswered.filter(a => a !== null).length;
+  const correct = quizAnswered.filter((a, i) => a === quizQuestions[i].correct).length;
+  const pct = Math.round((correct / quizQuestions.length) * 100);
+  const scoreBox = document.getElementById('quiz-score');
+  const color = pct >= 75 ? 'var(--green)' : pct >= 60 ? 'var(--yellow)' : 'var(--red)';
+  const msg = pct >= 75 ? '🎉 Great work! Keep it up.' : pct >= 60 ? '📚 Getting there! Review the explanations.' : '💪 Keep studying — you\'ve got this!';
+  scoreBox.innerHTML = `<div class="quiz-score-box">
+    <div class="big" style="color:${color}">${correct}/${quizQuestions.length}</div>
+    <div style="font-size:1.1rem; margin:6px 0; font-weight:600;">${pct}%</div>
+    <div class="sub">${msg}</div>
+    <div class="sub" style="margin-top:8px;">${answered} answered • ${quizQuestions.length - answered} skipped</div>
+  </div>`;
+  scoreBox.style.display = 'block';
+  scoreBox.scrollIntoView({behavior:'smooth'});
+}
+
+// ============================================================
+// OBJECTIVES
+// ============================================================
+const objectives = [
+  {d:0, text:"Understand and explain the CIA Triad"},
+  {d:0, text:"Differentiate between control types (technical, managerial, operational, physical) and categories (preventive, detective, corrective, etc.)"},
+  {d:0, text:"Explain symmetric vs. asymmetric encryption and give examples of each"},
+  {d:0, text:"Describe hashing and its role in integrity verification"},
+  {d:0, text:"Define PKI and the role of Certificate Authorities"},
+  {d:0, text:"Explain the three authentication factors (know/have/are) and what constitutes true MFA"},
+  {d:1, text:"Identify and describe common malware types (virus, worm, Trojan, ransomware, rootkit, etc.)"},
+  {d:1, text:"Explain social engineering techniques (phishing, spear phishing, vishing, pretexting, tailgating, baiting)"},
+  {d:1, text:"Describe common network attacks: DoS/DDoS, MitM, replay attacks"},
+  {d:1, text:"Explain common application attacks: SQL injection, XSS, buffer overflow"},
+  {d:1, text:"Understand vulnerability management: scanners, pen testing, CVE/CVSS, patch management"},
+  {d:1, text:"Explain what threat intelligence is and how it is used"},
+  {d:2, text:"Explain network segmentation concepts: VLAN, DMZ, microsegmentation, air gap"},
+  {d:2, text:"Differentiate IDS (passive, detects) from IPS (active, blocks)"},
+  {d:2, text:"Describe firewalls: packet-filtering, stateful, NGFW, and WAF"},
+  {d:2, text:"Explain Zero Trust principles and why they differ from traditional perimeter security"},
+  {d:2, text:"Understand cloud service models (IaaS/PaaS/SaaS) and the shared responsibility model"},
+  {d:2, text:"Define defense in depth and least privilege"},
+  {d:3, text:"Explain AAA (Authentication, Authorization, Accounting) and protocols like RADIUS/TACACS+"},
+  {d:3, text:"Describe access control models: RBAC, DAC, MAC"},
+  {d:3, text:"Memorize the 6 phases of the incident response lifecycle (PICERL)"},
+  {d:3, text:"Explain SIEM and its role in security operations"},
+  {d:3, text:"Describe endpoint security tools: EDR, antivirus, hardening"},
+  {d:3, text:"Understand DLP and MDM and what they protect against"},
+  {d:3, text:"Explain digital forensics principles: chain of custody, write blockers"},
+  {d:4, text:"Explain risk terminology: threat, vulnerability, likelihood, impact"},
+  {d:4, text:"Describe the four risk treatment options (accept, transfer, avoid, mitigate)"},
+  {d:4, text:"Define RTO and RPO and explain the difference"},
+  {d:4, text:"Know key compliance frameworks: NIST CSF, ISO 27001, PCI DSS, HIPAA, GDPR"},
+  {d:4, text:"Explain data classification and types of sensitive data (PII, PHI)"},
+  {d:4, text:"Describe governance concepts: AUP, separation of duties, change management, security awareness training"},
+];
+
+function renderObjectives() {
+  const domainTitles = ['Domain 1: General Security Concepts','Domain 2: Threats, Vulnerabilities & Mitigations','Domain 3: Security Architecture','Domain 4: Security Operations','Domain 5: Security Program Management'];
+  const domainColors = ['var(--accent)','var(--red)','var(--green)','var(--yellow)','var(--accent2)'];
+  let html = '';
+  for (let d = 0; d < 5; d++) {
+    const domainObjs = objectives.filter((o, i) => o.d === d).map((o, i) => ({...o, globalIdx: objectives.indexOf(o)}));
+    html += `<div class="card" style="margin-bottom:16px;"><h3 style="color:${domainColors[d]};margin-bottom:12px;">${domainTitles[d]}</h3><ul class="obj-list">`;
+    domainObjs.forEach(o => {
+      const checked = objProgress[o.globalIdx] ? 'checked' : '';
+      const cls = objProgress[o.globalIdx] ? 'obj-item checked' : 'obj-item';
+      html += `<li class="${cls}" id="obj-item-${o.globalIdx}" onclick="toggleObj(${o.globalIdx})">
+        <input type="checkbox" ${checked} onclick="event.stopPropagation(); toggleObj(${o.globalIdx})">
+        <label>${o.text}</label>
+      </li>`;
+    });
+    html += `</ul></div>`;
+  }
+  document.getElementById('obj-list').innerHTML = html;
+  updateObjProgress();
+}
+
+function toggleObj(idx) {
+  objProgress[idx] = !objProgress[idx];
+  localStorage.setItem('sec_obj_progress', JSON.stringify(objProgress));
+  const item = document.getElementById(`obj-item-${idx}`);
+  if (objProgress[idx]) item.classList.add('checked'); else item.classList.remove('checked');
+  item.querySelector('input').checked = !!objProgress[idx];
+  updateObjProgress();
+}
+
+function updateObjProgress() {
+  const total = objectives.length;
+  const done = Object.values(objProgress).filter(Boolean).length;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('obj-pct').textContent = `${pct}%`;
+  document.getElementById('obj-fill').style.width = pct + '%';
+}
+
+// Init
+initFlashcards();
+renderObjectives();
+</script>
+</body>
+</html>
