@@ -113,33 +113,10 @@
   .flash-example { font-size: 0.82rem; color: var(--muted); font-style: italic; }
 
   footer { text-align: center; color: var(--muted); font-size: 0.78rem; margin-top: 30px; }
+  .hidden { display: none !important; }
 </style>
 </head>
 <body>
-
-  // Check if they already logged in successfully before
-if (localStorage.getItem("study_access") === "granted") {
-    showContent();
-} else {
-    askPassword();
-}
-
-function askPassword() {
-    const password = prompt("Enter the course password:");
-    if (password === "Smith2026") { 
-        // Save their access so they don't have to re-type it next time
-        localStorage.setItem("study_access", "granted");
-        showContent();
-    } else {
-        alert("Incorrect password. Refresh the page to try again.");
-    }
-}
-
-function showContent() {
-    document.getElementById("study-content").classList.remove("hidden");
-    document.getElementById("closed-msg").style.display = "none";
-}
-
   
 <div class="wrap">
   <header>
@@ -362,5 +339,34 @@ function renderFlashcards() {
 
 startChapter();
 </script>
+
+  <div class="wrap hidden" id="study-content">
+  <!-- all your existing content -->
+</div>
+
+<script>
+  <!-- your existing app script stays here -->
+</script>
+
+<script>
+if (localStorage.getItem("study_access") === "granted") {
+    showContent();
+} else {
+    askPassword();
+}
+function askPassword() {
+    const password = prompt("Enter the course password:");
+    if (password === "knicksrule") {
+        localStorage.setItem("study_access", "granted");
+        showContent();
+    } else {
+        alert("Incorrect password. Refresh the page to try again.");
+    }
+}
+function showContent() {
+    document.getElementById("study-content").classList.remove("hidden");
+}
+</script>
+  
 </body>
 </html>
