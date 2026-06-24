@@ -112,6 +112,28 @@
 </head>
 <body>
 
+// Check if they already logged in successfully before
+if (localStorage.getItem("study_access") === "granted") {
+    showContent();
+} else {
+    askPassword();
+}
+
+function askPassword() {
+    const password = prompt("Enter the course password:");
+    if (password === "Smith2026") { 
+        // Save their access so they don't have to re-type it next time
+        localStorage.setItem("study_access", "granted");
+        showContent();
+    } else {
+        alert("Incorrect password. Refresh the page to try again.");
+    }
+}
+
+function showContent() {
+    document.getElementById("study-content").classList.remove("hidden");
+    document.getElementById("closed-msg").style.display = "none";
+}
 <header>
   <div>
     <h1>📚 Principles of Marketing 19e — Interactive Study Guide</h1>
